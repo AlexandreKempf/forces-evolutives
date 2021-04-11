@@ -34,14 +34,12 @@ def main():
     elif page == "Modélisation":
 
         columns = st.multiselect(
-            label="Quelles forces evolutives ?", options=["Mutation"],
+            label="Quelles forces evolutives ?",
+            options=["Dérive génétique", "Mutation"],
         )
 
         nb_runs = st.sidebar.number_input(
             "Nombre de simulations", 1, 200, 10, 1
-        )
-        pop_size = st.sidebar.number_input(
-            "Taille de la population", 0, 10000, 1000, 1
         )
         nb_generations = st.sidebar.number_input(
             "Nombre de générations", 1, 3000, 200, 10
@@ -49,6 +47,16 @@ def main():
         pA = st.sidebar.slider("Probabilité de l'allèle A", 0.0, 1.0, 0.5)
         st.sidebar.write(f"Probabilité de l'allèle A: {pA:.2f}")
         st.sidebar.write(f"Probabilité de l'allèle a: {1-pA:.2f}")
+
+        if "Dérive génétique" in columns:
+            """
+            ## Dérive Génétique
+            """
+            pop_size = st.number_input(
+                "Taille de la population", 0, 10000, 1000, 1
+            )
+        else:
+            pop_size = 10000
 
         if "Mutation" in columns:
             """
@@ -63,6 +71,7 @@ def main():
         else:
             mutation_rate_A_to_a = 0.0
             mutation_rate_a_to_A = 0.0
+
         """
         ## Resultats
         """
