@@ -58,9 +58,10 @@ def run_simultation(
 def display_multiple_runs(multiple_runs, N):
     colors_map = {
         "aa": "#ffce00",
+        "other2": "#ff3803",
         "Aa": "#d50032",
+        "other1": "#9e003e",
         "AA": "#630049",
-        "line": "#aa0000",
     }
 
     def draw_proba_allele(data, ax):
