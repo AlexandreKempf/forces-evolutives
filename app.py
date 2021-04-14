@@ -40,14 +40,104 @@ def run_model(
 def main():
 
     page = st.sidebar.selectbox(
-        "Choose a page", ["Hardy-Wienberg", "Dérive Génétique", "Modélisation"]
+        "Choisis une page", ["Hardy-Wienberg", "Modélisation"]
     )
 
     if page == "Hardy-Wienberg":
         """
         # L'équilibre d'Hardy-Wienberg
 
-        Yo papa 😄
+        Hardy Wienberg s'interessent aux allèles et aux génotypes d'une population au cours du temps.
+        Ils nous dise que sans forces évolutives (mutation, sélection naturelle ...)
+        la probabilité de chaque allèle, ou de chaque génotype, ne change pas au cours des générations.
+
+        ## Démonstration
+
+        On cherche à démontrer que :
+         - la proportion de chaque allèle reste contante au cours des générations.
+         - la proportion de chaque génotype reste constante au cours des générations.
+
+        Pour cela on considère deux allèles `A` et `a` ce qui nous donne 3 génotypes `AA`, `Aa`, `aa`.
+
+        On peut déduire le nombre d'individus total d'une population en additionant le nombre d'individus pour chaque génotype.
+        Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, on sait que la population totale est de $30 + 40 + 70 = 140$ individus
+
+        ### Calcul de la proportion d'un génotype
+
+        Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype par rapport au nombre total d'individus dans la population.
+        $$
+        proportion\_AA = \\frac{nb\_ind\_AA}{nb\_ind\_total}
+        $$
+        Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, la proportion de génotype `AA` est de $\\frac{30}{140} = 0.214$
+
+
+        ### Calcul de la proportion d'un allèle
+
+        Pour calculer la proportion de l'allèle A dans une population (que l'on appelle $p$),
+        il suffit de compter le nombre d'allèle A par rapport à la quantité d'allèle totale.
+
+        $$
+        p = \\frac{nb\_allele\_A}{nb\_allele\_total}
+        $$
+
+        Les individus `AA` possédent deux fois l'allèle `A` et les individus `Aa` la possédent une fois.
+        Du coup, le nombre d'allèle `A` est de : $2 . N_{AA} + 1 . N_{Aa}$.
+        Le nombre d'allèle total est de $2 . N_{total}$ puisque chaque individus de la population contient 2 allèles.
+
+        Du coup la fréquence allèlique de `A` est de :
+
+        $$
+        p = \\frac{2 . N_{AA} + 1 . N_{Aa}}{2 . N_{total}}
+        $$
+
+        Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, la proportion de l'allèle `A` est de $\\frac{2 . 30 + 1 . 40}{2 . 140} = 0.357
+        $
+
+        Et ca veut dire qu'un individu de cette population a $35.7\%$ chance d'avoir l'allèle A.
+
+        On peut procéder de la même manière pour calculer la proportion de l'allèle `a`, que l'on appelle `q` ou simplement faire $(1-A)$.
+
+        ### Proportion des génotypes à la génération suivante
+
+        Chaque nouvel individu est formé par la rencontre de deux gamètes.
+        Chaque gamète possédent un seul allèle avec la probabilité $p\_A$ que cet allèle soit un `A`.
+        Si deux gamètes se rencontrent, on peut faire l'arbre de probabilité suivant:
+        """
+
+        st.image("proba_tree.png")
+
+        """
+        On a donc $p^2$ chance d'obtenir un individu `AA`, $2pq$ chance d'avoir un individu `Aa`,
+        et $q^2$ chance d'avoir un individu `aa`.
+        Si on appelle $M$ le nombre d'individus de cette nouvelle génération,
+        on aura $M . p^2$ individus `AA`, $M . 2 . p . q$ individus `Aa`,
+        et $M . q^2$ individus `aa`.
+
+        ### Proportion des allèles à la génération suivante
+
+        On peut calculer, comme on l'a fait précedement la proportion d'allèle `A` dans cette nouvelle génération de M individus.
+
+        $$
+        p = \\frac{2 . N_{AA} + 1 . N_{Aa}}{2 . N_{total}} =
+        \\frac{2 . M . p^2 + M . 2 . p . q}{2 . M}
+        $$
+
+        Qui une fois simplifié en "barrant" les $2M$ donne
+        p^2 + p . q = p^2 + p. (1-p) = p^2 + p - p^2 = p
+        $$
+
+        La proportion d'allèle `A` dans la nouvelle génération est donc de $p$.
+
+        ### Conclusion de la démonstration
+
+        On a montré que, en l'absence de toute force évolutive,
+        les proportion d'allèle `A` et `a` (respectivement $p$ et $q$)
+        restaient les même d'une génération à l'autre.
+        Nous avons aussi montré que la génération suivante a une proportion $p^2$ d'individus `AA`,
+        $2.p.q$ d'individus `Aa`, et $q^2$ d'individus `aa`.
+        Du coup de manière logique, toutes les générations auront les mêmes proportions de génotypes
+        puisque la valeur de $p$ et $q$ ne change pas.
+
         """
 
     elif page == "Modélisation":
