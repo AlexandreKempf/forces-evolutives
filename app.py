@@ -64,9 +64,9 @@ def main():
 
         ### Calcul de la proportion d'un génotype
 
-        Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype par rapport au nombre total d'individus dans la population.
+        Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype ($N_{AA} par exemple pour le génotype `AA`) par rapport au nombre total d'individus dans la population ($N_{total}).
         $$
-        proportion\_AA = \\frac{nb\_ind\_AA}{nb\_ind\_total}
+        proportion\_AA = \\frac{N_{AA}}{N_{total}}
         $$
         Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, la proportion de génotype `AA` est de $\\frac{30}{140} = 0.214$
 
@@ -123,10 +123,13 @@ def main():
         $$
 
         Qui une fois simplifié en "barrant" les $2M$ donne
+
+        $$
         p^2 + p . q = p^2 + p. (1-p) = p^2 + p - p^2 = p
         $$
 
         La proportion d'allèle `A` dans la nouvelle génération est donc de $p$.
+
 
         ### Conclusion de la démonstration
 
