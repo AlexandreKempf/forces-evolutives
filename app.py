@@ -39,6 +39,16 @@ def run_model(
 
 def main():
 
+    st.markdown(
+        f"""
+    <style>
+        .reportview-container .main .block-container{{max-width: 80%;}}
+
+    </style>
+    """,
+        unsafe_allow_html=True,
+    )
+
     page = st.sidebar.selectbox(
         "Choisis une page", ["Hardy-Wienberg", "Modélisation"]
     )
@@ -64,7 +74,7 @@ def main():
 
         ### Calcul de la proportion d'un génotype
 
-        Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype ($N_{AA} par exemple pour le génotype `AA`) par rapport au nombre total d'individus dans la population ($N_{total}).
+        Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype ($N_{AA}$ par exemple pour le génotype `AA`) par rapport au nombre total d'individus dans la population ($N_{total}$).
         $$
         proportion\_AA = \\frac{N_{AA}}{N_{total}}
         $$
@@ -104,7 +114,7 @@ def main():
         Si deux gamètes se rencontrent, on peut faire l'arbre de probabilité suivant:
         """
 
-        st.image("proba_tree.png")
+        st.image("proba_tree.png", width=800)
 
         """
         On a donc $p^2$ chance d'obtenir un individu `AA`, $2pq$ chance d'avoir un individu `Aa`,
