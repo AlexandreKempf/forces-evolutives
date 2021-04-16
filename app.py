@@ -50,29 +50,32 @@ def main():
     )
 
     page = st.sidebar.selectbox(
-        "Choisis une page", ["Hardy-Wienberg", "Modélisation"]
+        "Choisis une page", ["Hardy-Wienberg", "Modélisation", "Exercice"]
     )
 
     if page == "Hardy-Wienberg":
         """
         # L'équilibre d'Hardy-Wienberg
 
-        Hardy Wienberg s'interessent aux allèles et aux génotypes d'une population au cours du temps.
-        Ils nous dise que sans forces évolutives (mutation, sélection naturelle ...)
+        Hardy Wienberg s'interessent à l'évolution de la fréquence des allèles
+        et aux génotypes d'une population au cours du temps.
+        Ils nous disent dans une population d'effectif infini, sans forces évolutives
+        (mutation, sélection naturelle ...) et avec une reproduction panmictique des individus
+        qui se reproduisent aléatoirement,
         la probabilité de chaque allèle, ou de chaque génotype, ne change pas au cours des générations.
 
         ## Démonstration
 
         On cherche à démontrer que :
-         - la proportion de chaque allèle reste contante au cours des générations.
+         - la proportion de chaque allèle reste constante au cours des générations.
          - la proportion de chaque génotype reste constante au cours des générations.
 
         Pour cela on considère deux allèles `A` et `a` ce qui nous donne 3 génotypes `AA`, `Aa`, `aa`.
 
-        On peut déduire le nombre d'individus total d'une population en additionant le nombre d'individus pour chaque génotype.
+        On peut déduire le nombre d'individus total d'une population en additionnant le nombre d'individus pour chaque génotype.
         Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, on sait que la population totale est de $30 + 40 + 70 = 140$ individus
 
-        ### Calcul de la proportion d'un génotype
+        ### Calcul de la proportion d'un génotype dans la population
 
         Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype ($N_{AA}$ par exemple pour le génotype `AA`) par rapport au nombre total d'individus dans la population ($N_{total}$).
         $$
@@ -81,16 +84,16 @@ def main():
         Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, la proportion de génotype `AA` est de $\\frac{30}{140} = 0.214$
 
 
-        ### Calcul de la proportion d'un allèle
+        ### Calcul de la proportion d'un allèle dans la population
 
         Pour calculer la proportion de l'allèle A dans une population (que l'on appelle $p$),
-        il suffit de compter le nombre d'allèle A par rapport à la quantité d'allèle totale.
+        il suffit de compter le nombre d'allèle A par rapport à la quantité totale d'allèles.
 
         $$
         p = \\frac{nb\_allele\_A}{nb\_allele\_total}
         $$
 
-        Les individus `AA` possédent deux fois l'allèle `A` et les individus `Aa` la possédent une fois.
+        Les individus homozygotes `AA` possèdent deux fois l'allèle `A` et les individus hétérozygotes `Aa` ne possèdent qu'un allèle A.
         Du coup, le nombre d'allèle `A` est de : $2 . N_{AA} + 1 . N_{Aa}$.
         Le nombre d'allèle total est de $2 . N_{total}$ puisque chaque individus de la population contient 2 allèles.
 
@@ -103,15 +106,16 @@ def main():
         Par exemple, si une population a 30 `AA`, 40 `Aa`, et 70 `aa`, la proportion de l'allèle `A` est de $\\frac{2 . 30 + 1 . 40}{2 . 140} = 0.357
         $
 
-        Et ca veut dire qu'un individu de cette population a $35.7\%$ chance d'avoir l'allèle A.
+        Et ca veut dire qu'un individu de cette population à $35.7\%$ chance d'avoir l'allèle A.
 
-        On peut procéder de la même manière pour calculer la proportion de l'allèle `a`, que l'on appelle `q` ou simplement faire $(1-A)$.
+        On peut procéder de la même manière pour calculer la proportion de l'allèle `a`,
+        que l'on appelle `q` ou simplement faire $q = (1-p)$.
 
         ### Proportion des génotypes à la génération suivante
 
-        Chaque nouvel individu est formé par la rencontre de deux gamètes.
-        Chaque gamète possédent un seul allèle avec la probabilité $p\_A$ que cet allèle soit un `A`.
-        Si deux gamètes se rencontrent, on peut faire l'arbre de probabilité suivant:
+        Dans une population panmictique, chaque nouvel individu est formé par la rencontre alêatoire de deux gamètes.
+        Chaque gamète possède un seul allèle avec la probabilité $pA$ que cet allèle soit un `A`.
+        Comme deux gamètes se rencontrent au hasard, on peut faire l'arbre de probabilité suivant:
         """
 
         st.image("proba_tree.png", width=800)
@@ -125,7 +129,7 @@ def main():
 
         ### Proportion des allèles à la génération suivante
 
-        On peut calculer, comme on l'a fait précedement la proportion d'allèle `A` dans cette nouvelle génération de M individus.
+        On peut calculer, comme on l'a fait précédement la proportion d'allèle `A` dans cette nouvelle génération de M individus.
 
         $$
         p = \\frac{2 . N_{AA} + 1 . N_{Aa}}{2 . N_{total}} =
@@ -138,13 +142,14 @@ def main():
         p^2 + p . q = p^2 + p. (1-p) = p^2 + p - p^2 = p
         $$
 
-        La proportion d'allèle `A` dans la nouvelle génération est donc de $p$.
+        La proportion d'allèle `A` dans la nouvelle génération est donc de $p$, comme celle de la génération précédente.
+        Comme $q=1-p$, la proportion de l'allèle `a` est égale à q comme celle de la génération précédente.
 
 
         ### Conclusion de la démonstration
 
         On a montré que, en l'absence de toute force évolutive,
-        les proportion d'allèle `A` et `a` (respectivement $p$ et $q$)
+        les proportions d'allèles `A` et `a` (respectivement $p$ et $q$)
         restaient les même d'une génération à l'autre.
         Nous avons aussi montré que la génération suivante a une proportion $p^2$ d'individus `AA`,
         $2.p.q$ d'individus `Aa`, et $q^2$ d'individus `aa`.
@@ -255,28 +260,55 @@ def main():
         fig = model.display_multiple_runs(multiple_runs, pop_size)
         st.pyplot(fig)
 
-    # elif page == 'Exploration':
-    # st.title('Explore the Wine Data-set')
-    # if st.checkbox('Show column descriptions'):
-    #     st.dataframe(df.describe())
-    #
-    # st.markdown('### Analysing column relations')
-    # st.text('Correlations:')
-    # fig, ax = plt.subplots(figsize=(10,10))
-    # sns.heatmap(df.corr(), annot=True, ax=ax)
-    # st.pyplot(fig)
-    # st.text('Effect of the different classes')
-    # fig = sns.pairplot(df, vars=['magnesium', 'flavanoids', 'nonflavanoid_phenols', 'proline'], hue='alcohol')
-    # st.pyplot(fig)
-    # else:
-    # st.title('Modelling')
-    # model, accuracy = train_model(df)
-    # st.write('Accuracy: ' + str(accuracy))
-    # st.markdown('### Make prediction')
-    # st.dataframe(df)
-    # row_number = st.number_input('Select row', min_value=0, max_value=len(df)-1, value=0)
-    # st.markdown('#### Predicted')
-    # st.text(model.predict(df.drop(['alcohol'], axis=1).loc[row_number].values.reshape(1, -1))[0])
+    elif page == "Exercice":
+        """
+        # Découvert du modèle de Hardy-Weinberg
+
+        ## Objectif
+        Comparer deux populations panmictiques, d’effectif infini,
+        sans mutations ni migration par rapport à l’évolution d’un gène qui code
+        un caractère monogénique diallélique avec dominance de l’allèle A cercle
+        bleu `Happy` sur l’allèle a cercle rouge `Grumpy`
+
+
+        ## Documents
+
+        On a un échantillon d'individus d'une **population 1** de taille infinie, panmictique,
+        sans sélection, ni mutations, ni migration… avant la Covid.
+        """
+        st.image("exercice_pop1.png", width=400)
+
+        """
+        On a aussi un échantillon d'individus d'une **population 2** de taille infinie, panmictique,
+        sans mutations, ni migration… après la Covid.
+        """
+        st.image("exercice_pop2.png", width=400)
+        """
+        On fourni aussi les valeurs seuils du test du Chi2 associées à leurs probabilités d'erreurs.
+        Ces valeurs sont obtenues pour un nombre de degrés de libertés de 2 car nous testons 3 génotypes
+        `AA`, `Aa`, et `aa` toutes liés entre elles par :
+
+        $$
+        N_{AA} + N_{Aa} + N_{aa} = N_{total}
+        $$
+
+        | Probabilité | 0.9 | 0.5 | 0.3 | 0.2 | 0.1 | 0.05 | 0.02 | 0.01 | 0.001 |
+        | --- | --- | --- | --- | --- | --- | --- | --- | --- | --- |
+        | Valeur seuil Chi2 | 0.211 | 1.386 | 2.408 | 3.219 | 4.605 | **5.991** | 7.824 | 9.210 | 13.815 |
+
+        ## Questions
+
+        1. A partir de ces données, montrer que l’une de ces deux populations n’est pas à l’équilibre de Hardy-Weinberg en calculant:
+           - la fréquence des deux allèles : $f(A) = p$ et $f(a) = q$
+           - l’effectif théorique des deux populations si elles étaient panmictiques et à l’équilibre de Hardy-Weinberg
+           - l’écart entre les effectifs observés O_i et calculés C_i en faisant le test de conformité à la panmixie du Chi2, pour une probabilité d’erreur de 0,05
+
+        $$
+        Chi2 = \\sum{\\frac{(O_i - C_i)^2}{C_i}}
+        $$
+
+        2. En tenant compte des données fournies dans l'énoncé, proposez une explication à vos résultats pour la population A et pour la population B.
+        """
 
 
 if __name__ == "__main__":
