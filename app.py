@@ -15,7 +15,7 @@ def run_model(
     nb_runs,
     nb_generations,
     pop_size,
-    pA,
+    p_A,
     mutation_rate_A_to_a,
     mutation_rate_a_to_A,
     fitness_AA,
@@ -27,7 +27,7 @@ def run_model(
         multiple_runs[i] = model.run_simultation(
             nb_generations,
             pop_size,
-            pA,
+            p_A,
             mutation_rate_A_to_a,
             mutation_rate_a_to_A,
             fitness_AA,
@@ -171,9 +171,9 @@ def main():
         nb_generations = st.sidebar.number_input(
             "Nombre de générations", 1, 3000, 200, 10
         )
-        pA = st.sidebar.slider("Probabilité de l'allèle A", 0.0, 1.0, 0.5)
-        st.sidebar.write(f"Probabilité de l'allèle A: {pA:.2f}")
-        st.sidebar.write(f"Probabilité de l'allèle a: {1-pA:.2f}")
+        p_A = st.sidebar.slider("Probabilité de l'allèle A", 0.0, 1.0, 0.5)
+        st.sidebar.write(f"Probabilité de l'allèle A: {p_A:.2f}")
+        st.sidebar.write(f"Probabilité de l'allèle a: {1-p_A:.2f}")
 
         if "Dérive génétique" in columns:
             """
@@ -250,7 +250,7 @@ def main():
             nb_runs,
             nb_generations,
             pop_size,
-            pA,
+            p_A,
             mutation_rate_A_to_a,
             mutation_rate_a_to_A,
             fitness_AA,

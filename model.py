@@ -9,7 +9,7 @@ np.random.binomial(100, 0.5)
 def run_simultation(
     nb_gen,
     N,
-    pA,
+    p_A,
     mutation_rate_A_to_a,
     mutation_rate_a_to_A,
     fitness_AA,
@@ -26,8 +26,8 @@ def run_simultation(
     genotypes = np.zeros((3, nb_gen))  # AA, Aa, aa
     for t in range(nb_gen):
 
-        mum = np.random.choice(["A", "a"], N, p=genepool / N)
-        dad = np.random.choice(["A", "a"], N, p=genepool / N)
+        mum = np.random.choice(["A", "a"], N, p=genepool / np.sum(genepool))
+        dad = np.random.choice(["A", "a"], N, p=genepool / np.sum(genepool))
 
         N_AA = np.sum((mum == "A") & (dad == "A"))
         N_aa = np.sum((mum == "a") & (dad == "a"))
@@ -38,7 +38,7 @@ def run_simultation(
         genotypes[2, t] = N_aa
 
         # selection
-        if not fitness_AA == fitness_Aa == fitness_Aa:
+        if not fitness_AA == fitness_Aa == fitness_aa:
             N_AA = np.random.binomial(N_AA, fitness_AA)
             N_Aa = np.random.binomial(N_Aa, fitness_Aa)
             N_aa = np.random.binomial(N_aa, fitness_aa)
@@ -47,65 +47,12 @@ def run_simultation(
         N_a = N_aa + 0.5 * N_Aa
         genepool = np.array([N_A, N_a])
         # mutation
-        if not mutation_rate_A_to_a == mutation_rate_A_to_a == 0:
+        if mutation_rate_A_to_a != 0 or mutation_rate_a_to_A != 0:
             mut_A_to_a = np.random.binomial(N_A, mutation_rate_A_to_a)
             mut_a_to_A = np.random.binomial(N_a, mutation_rate_a_to_A)
             genepool[0] += mut_a_to_A - mut_A_to_a
             genepool[1] += mut_A_to_a - mut_a_to_A
     return genotypes
-
-
-#
-# def run_simultation(
-#     nb_gen,
-#     N,
-#     pA,
-#     mutation_rate_A_to_a,
-#     mutation_rate_a_to_A,
-#     fitness_AA,
-#     fitness_Aa,
-#     fitness_aa,
-# ):
-#     max_fitness = np.max([fitness_AA, fitness_Aa, fitness_aa])
-#     fitness_AA /= max_fitness
-#     fitness_Aa /= max_fitness
-#     fitness_aa /= max_fitness
-#     pa = 1 - pA
-#     genepool = np.random.choice(["A", "a"], N * 2, p=[pA, pa])
-#     genotypes = np.zeros((3, nb_gen))  # AA, Aa, aa
-#     for t in range(nb_gen):
-#         mum = np.random.choice(genepool, N)
-#         dad = np.random.choice(genepool, N)
-#
-#         AA = (mum == "A") & (dad == "A")
-#         Aa = ((mum == "A") & (dad == "a")) | ((mum == "a") & (dad == "A"))
-#         aa = (mum == "a") & (dad == "a")
-#
-#         genotypes[0, t] = np.sum(AA)
-#         genotypes[1, t] = np.sum(Aa)
-#         genotypes[2, t] = np.sum(aa)
-#
-#         idx_vivants_AA = np.random.choice(
-#             np.where(AA)[0], int(np.sum(AA) * fitness_AA), replace=False
-#         )
-#         idx_vivants_Aa = np.random.choice(
-#             np.where(Aa)[0], int(np.sum(Aa) * fitness_Aa), replace=False
-#         )
-#         idx_vivants_aa = np.random.choice(
-#             np.where(aa)[0], int(np.sum(aa) * fitness_aa), replace=False
-#         )
-#         idx_vivants = np.sort(
-#             np.concatenate([idx_vivants_AA, idx_vivants_Aa, idx_vivants_aa])
-#         )
-#
-#         genepool = np.concatenate([mum[idx_vivants], dad[idx_vivants]])
-#         A = genepool == "A"
-#         mutants_A_to_a = A & (np.random.random(len(A)) < mutation_rate_A_to_a)
-#         a = genepool == "a"
-#         mutants_a_to_A = a & (np.random.random(len(a)) < mutation_rate_a_to_A)
-#         genepool[mutants_A_to_a] = "a"
-#         genepool[mutants_a_to_A] = "A"
-#     return genotypes
 
 
 def display_multiple_runs(multiple_runs, N):
