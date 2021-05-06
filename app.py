@@ -265,7 +265,6 @@ def main():
         On peut voir quelle est la probabilité d'obtenir cet échantillon sur la courbe du Chi2.
 
         """
-        from scipy.stats import chi2
 
         fig, ax = plt.subplots(1, 1)
         fig.set_size_inches(4, 2)
@@ -316,7 +315,7 @@ def main():
             fAa = 2 * fA * fa
             faa = fa ** 2
 
-            chi2, pvalue = chisquare(
+            chi2_value, pvalue = chisquare(
                 [AA, Aa, aa], f_exp=[fAA * N, fAa * N, faa * N]
             )
 
@@ -335,7 +334,7 @@ def main():
             - {np.around(100*Aa/N, 2)} % de (`Aa`)
             - {np.around(100*aa/N, 2)} % de (`aa`)
 
-            Le test du Chi2 produit une valeur de {np.around(chi2, 4)} et il y a par conséquent {np.around(pvalue*100, 7)} % de chance que notre échantillon provienne d'une population à l'équilibre de Hardy Wienberg.
+            Le test du Chi2 produit une valeur de {np.around(chi2_value, 4)} et il y a par conséquent {np.around(pvalue*100, 7)} % de chance que notre échantillon provienne d'une population à l'équilibre de Hardy Wienberg.
             """
 
             if pvalue < 0.05:
