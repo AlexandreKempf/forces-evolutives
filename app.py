@@ -265,6 +265,7 @@ def main():
         On peut voir quelle est la probabilité d'obtenir cet échantillon sur la courbe du Chi2.
 
         """
+        from scipy.stats import chi2
 
         fig, ax = plt.subplots(1, 1)
         fig.set_size_inches(4, 2)
