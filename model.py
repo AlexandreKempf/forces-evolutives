@@ -3,7 +3,13 @@ import numpy as np
 import seaborn
 
 
-np.random.binomial(100, 0.5)
+colors_map = {
+    "aa": "#ffce00",
+    "other2": "#ff3803",
+    "Aa": "#d50032",
+    "other1": "#9e003e",
+    "AA": "#630049",
+}
 
 
 def run_simultation(
@@ -26,16 +32,15 @@ def run_simultation(
     genotypes = np.zeros((3, nb_gen))  # AA, Aa, aa
     for t in range(nb_gen):
 
-        mum = np.random.choice(["A", "a"], N, p=genepool / np.sum(genepool))
-        dad = np.random.choice(["A", "a"], N, p=genepool / np.sum(genepool))
-
-        N_AA = np.sum((mum == "A") & (dad == "A"))
-        N_aa = np.sum((mum == "a") & (dad == "a"))
+        N_AA = np.random.binomial(N, p_A * p_A)
+        N_aa = np.random.binomial(N, p_a * p_a)
         N_Aa = N - N_AA - N_aa
 
         genotypes[0, t] = N_AA
         genotypes[1, t] = N_Aa
         genotypes[2, t] = N_aa
+        p_A = (N_AA + 0.5 * N_Aa) / N
+        p_a = 1 - p_A
 
         # selection
         if not fitness_AA == fitness_Aa == fitness_aa:
@@ -56,14 +61,6 @@ def run_simultation(
 
 
 def display_multiple_runs(multiple_runs, N):
-    colors_map = {
-        "aa": "#ffce00",
-        "other2": "#ff3803",
-        "Aa": "#d50032",
-        "other1": "#9e003e",
-        "AA": "#630049",
-    }
-
     def draw_proba_allele(data, ax):
         ax.fill_between(
             np.arange(0, data.shape[1]),
@@ -128,4 +125,38 @@ def display_multiple_runs(multiple_runs, N):
 
     axes[0].set_xticks([])
     axes[1].set_xlabel("nombre de générations")
+    return fig
+
+
+def display_echantillons(echantillons, truth):
+    echantillons = np.concatenate(
+        [[truth], [[0, 0, 0]], [[0, 0, 0]], echantillons]
+    )
+    echantillons_cum = echantillons.cumsum(axis=1)
+    fig, ax = plt.subplots()
+    ax.invert_yaxis()
+    ax.set_xlabel("Nombre de génotype dans chaque échantillon")
+    ax.set_xlim(0, np.sum(echantillons, axis=1).max())
+    ax.tick_params(
+        axis="y",  # changes apply to the x-axis
+        which="both",  # both major and minor ticks are affected
+        left=False,  # ticks along the bottom edge are off
+        right=False,
+    )
+    genotypes = ["AA", "Aa", "aa"]
+    labels = ["Population totale", "", " ", "Échantillons"]
+    labels += [" " * (e + 2) for e in range(len(echantillons) - len(labels))]
+    for i in range(3):
+        widths = echantillons[:, i]
+        starts = echantillons_cum[:, i] - widths
+        color = colors_map[genotypes[i]]
+        rects = ax.barh(
+            labels,
+            widths,
+            left=starts,
+            height=0.5,
+            label=f"({genotypes[i]})",
+            color=color,
+        )
+    ax.legend(ncol=3, bbox_to_anchor=(0, 1), loc="lower left", fontsize="small")
     return fig
