@@ -197,7 +197,7 @@ def main():
         )
         population_ratio = np.array([x[0], x[1] - x[0], 1 - x[1]])
         sample_size = st.number_input(
-            "Nombre d'individus dans l'échantillon", 0, 10000, 100, 10
+            "Nombre d'individus dans l'échantillon", 0, 1000000, 100, 10
         )
         nb_echantillons = st.number_input("Nombre d'échantillons", 0, 30, 10, 1)
 
@@ -322,7 +322,7 @@ def main():
             f"""
             On a donc un échantillon de taille {N}.
 
-            La fréquence allélique de l'échantillon est de {np.around(fa, 2)} pour `A` et {np.around(fa, 2)} pour `a`.
+            La fréquence allélique de l'échantillon est de {np.around(fA, 2)} pour `A` et {np.around(fa, 2)} pour `a`.
 
             Par conséquent, si la population si la population est à l'équilibre de Hardy Wienberg, on s'attend à avoir:
              - {np.around(100*fAA, 2)} % de (`AA`)
