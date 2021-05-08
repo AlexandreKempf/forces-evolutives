@@ -50,14 +50,14 @@ def main():
 
     page = st.sidebar.selectbox(
         "Choisis une page",
-        ["Hardy-Wienberg", "Test Statistique", "Modélisation", "Exercice"],
+        ["Hardy-Weinberg", "Test Statistique", "Modélisation", "Exercice"],
     )
 
-    if page == "Hardy-Wienberg":
+    if page == "Hardy-Weinberg":
         """
-        # L'équilibre d'Hardy-Wienberg
+        # L'équilibre d'Hardy-Weinberg
 
-        Hardy Wienberg s'interessent à l'évolution de la fréquence des allèles
+        Hardy Weinberg s'interessent à l'évolution de la fréquence des allèles
         et aux génotypes d'une population au cours du temps.
         Ils nous disent dans une population d'effectif infini, sans forces évolutives
         (mutation, sélection naturelle ...) et avec une reproduction panmictique des individus
@@ -163,29 +163,29 @@ def main():
     elif page == "Test Statistique":
 
         """
-        ## Qu'est ce qu'un échantillon ?
+        ## Qu'est-ce qu'un échantillon ?
 
         Si on souhaite mesurer une caractéristique sur une grande population, on doit mesurer tous les individus de la population,
         mais il est souvent impossible de faire la mesure sur la population entière. Dans la pratique, on choisit un échantillon aléatoire de la
         population, c'est a dire plusieurs individus pris au hasard que l'on mesure pour avoir une approximation.
         Dans une population de 3 million d'individus avec deux allèles `A` et `a` pour un gène et ses trois génotypes associés (`AA`), (`Aa`), et (`aa`),
-        il est plus facile de compter les génotypes de 100 individus pour avoir les fréquences génotypiques plutot que de compter les 3 millions d'individus.
+        il est plus facile de compter les génotypes de 100 individus pour avoir les fréquences génotypiques plutôt que de compter les 3 millions d'individus.
 
         On distingue la **mesure sur l'échantillon** obtenue après la avoir compté les 100 individus, de la **mesure théorique**
         que l'on aurait obtenue si on avait compté toute la population.
 
-        Un échantillon est une représentation imparfaite de la population. Il se peut que par hasard, il contient plus d'individus (`AA`),
-        ou au contraire, plus d'individus (`aa`). Par conséquent, la mesure obtenues sur l'échantillon n'est quasiment jamais exactement égale à
+        Un échantillon est une représentation imparfaite de la population. Il se peut que par hasard, il contienne plus d'individus (`AA`),
+        ou au contraire, plus d'individus (`aa`). Par conséquent, la mesure obtenue sur l'échantillon n'est quasiment jamais exactement égale à
         la mesure théorique.
-        D'ailleurs un autre échantillon, contenant 100 individus différents, aurait des fréquence génotypique sensiblement différente de notre premier échantillon.
+        D'ailleurs un autre échantillon, contenant 100 individus différents, aurait des fréquences génotypiques sensiblement différentes de notre premier échantillon.
 
         De manière générale, plus un échantillon est grand, plus il y a de chance que la valeur estimée soit
         proche de la valeur théorique. A l'inverse, plus l'échantillon est petit, plus les valeurs estimées seront, en moyenne, éloignées de la valeur théorique.
 
-        ## Echantillonage aléatoire d'une population connue
+        ## Échantillonnage aléatoire d'une population connue
 
-        Pour estimer la fréquence génotypique de la population, on prends plusieurs échantillons aléatoirement dans la population.
-        On observe grace a un tirage aléatoire d'individus qui forment nos échantillons, que chaque échantillon possède des proportions de génotypes differentes.
+        Pour estimer la fréquence génotypique de la population, on prend plusieurs échantillons aléatoirement dans la population.
+        On observe grâce à un tirage aléatoire d'individus qui forment nos échantillons, que chaque échantillon possède des proportions de génotypes différentes.
         """
 
         x = st.slider(
@@ -224,10 +224,10 @@ def main():
 
         Une fois que l'on a mesuré les fréquences des 3 génotypes, on peut demander quelle est la fréquence génotypique dans la population totale.
         La meilleure estimation que l'on puisse avoir est celle de l'échantillon. Par exemple, si on compte 30% de (`AA`) dans notre échantillon,
-        on peux dire "la fréquence allélique des (`AA`) dans la population totale est d'environ 30%". On a une chance de me tromper bien sur,
+        on peut dire "la fréquence allélique des (`AA`) dans la population totale est d'environ 30%". On a une chance de me tromper bien sûr,
         mais elle est moins importante que si on avait dit "la fréquence allélique des (`AA`) dans la population totale est d'environ 60%".
 
-        On peut mesurer les chances de se tromper grace aux tests statistiques.
+        On peut mesurer les chances de se tromper grâce aux tests statistiques.
 
         Pour cela il faut prendre le problème à l'envers. On va faire une hypothèse sur la population (par exemple, l'hypothèse
         qu'il y a 33% de (`AA`), 33% de (`Aa`), et 34% de (`aa`))
@@ -242,21 +242,21 @@ def main():
         Du coup on va conclure que la population a de grande chance de ne pas avoir 33% de (`AA`), 33% de (`Aa`), et 34% de (`aa`).
 
         En revanche, si notre échantillon de 100 individus contient 32% de (`AA`), 35% de (`Aa`), et 33% de (`aa`), il y a de grande chance que
-        notre échantillon soit originaire d'une population qui suit notre hypothèse. La différence entre les fréquence alléliques de notre hypothèse,
+        notre échantillon soit originaire d'une population qui suit notre hypothèse. La différence entre les fréquences alléliques de notre hypothèse,
         vient certainement du hasard de l'échantillon.
-        On en concluera qu'il y a de grande chance que notre échantillon ait été pris dans une population avec des fréquences alléliques de  33% (`AA`), 33% (`Aa`), et 34% (`aa`).
+        On en conclura qu'il y a de grande chance que notre échantillon ait été pris dans une population avec des fréquences alléliques de  33% (`AA`), 33% (`Aa`), et 34% (`aa`).
 
         Il existe une équation qui nous donne la probabilité que notre échantillon ait été pris dans une population en fonction des fréquences génotypiques hypothétiques de la population,
         et de celle mesurées dans notre échantillon. On appelle cette équation l'équation du Chi2.
 
-        Pour chaque génotype $i$, on compare le nombre d'individus que l'on a observé ($Obs_i$) contre le nombre d'individus que l'on aurait du obtenir si la population suivait l'hypothèse $Theo_i$.
+        Pour chaque génotype $i$, on compare le nombre d'individus que l'on a observé ($Obs_i$) contre le nombre d'individus que l'on aurait dû obtenir si la population suivait l'hypothèse $Theo_i$.
 
         $$
         Chi2 = \\sum{\\frac{(Obs_i - Theo_i)^2}{Theo_i} }
         $$
 
         Par exemple dans le cas de notre premier échantillon avec 60% de (`AA`), 20% de (`Aa`), et 20% de (`aa`), on a compté 60 (`AA`), 20 (`Aa`), et 20 (`aa`) dans notre échantillon.
-        Si notre population suit l'hypothèse décrite dans notre example, on s'attends idéalement à avoir 33 (`AA`), 33 (`Aa`), et 34 (`aa`). Du coup notre Chi2 vaut:
+        Si notre population suit l'hypothèse décrite dans notre exemple, on s'attend idéalement à avoir 33 (`AA`), 33 (`Aa`), et 34 (`aa`). Du coup notre Chi2 vaut:
 
         $$
         Chi2 = \\frac{(60-33)^2}{33} + \\frac{(20-33)^2}{33} + \\frac{(20-34)^2}{34} = 32.977
@@ -280,11 +280,11 @@ def main():
         En d'autre terme, si on observe un tel échantillon, on est presque certain que la population
         n'est pas distribuée avec 33% de (`AA`), 33% de (`Aa`), et 34% de (`aa`).
 
-        ## Exemple pratique avec l'équilibre de Hardy Wienberg
+        ## Exemple pratique avec l'équilibre de Hardy Weinberg
 
-        Grace au test du Chi2, on peut maintenant determiner si un echantillon dont on vient de mesurer les fréquence génotypiques
-        provient d'une population qui est à l'équilibre de Hardy Wienberg. Pour cela on fait l'hypothèse que notre population est à l'équilibre
-        de Hardy Wienberg avec $p^2 %$ de (`AA`), $2pq %$ de (`Aa`), et $q^2 %$ de (`aa`), ou $p$ et $q$ sont les fréquence allèliques respectives de l'allèle `A` et `a`.
+        Grace au test du Chi2, on peut maintenant déterminer si un échantillon dont on vient de mesurer les fréquences génotypiques
+        provient d'une population qui est à l'équilibre de Hardy Weinberg. Pour cela on fait l'hypothèse que notre population est à l'équilibre
+        de Hardy Weinberg avec $p^2 %$ de (`AA`), $2pq %$ de (`Aa`), et $q^2 %$ de (`aa`), ou $p$ et $q$ sont les fréquences allèliques respectives de l'allèle `A` et `a`.
 
         Entrez les valeurs que vous observez dans votre échantillon pour chaque génotype:
         """
@@ -324,7 +324,7 @@ def main():
 
             La fréquence allélique de l'échantillon est de {np.around(fA, 2)} pour `A` et {np.around(fa, 2)} pour `a`.
 
-            Par conséquent, si la population si la population est à l'équilibre de Hardy Wienberg, on s'attend à avoir:
+            Par conséquent, si la population est à l'équilibre de Hardy Weinberg, on s'attend à avoir:
              - {np.around(100*fAA, 2)} % de (`AA`)
              - {np.around(100*fAa, 2)} % de (`Aa`)
              - {np.around(100*faa, 2)} % de (`aa`)
@@ -334,16 +334,16 @@ def main():
             - {np.around(100*Aa/N, 2)} % de (`Aa`)
             - {np.around(100*aa/N, 2)} % de (`aa`)
 
-            Le test du Chi2 produit une valeur de {np.around(chi2_value, 4)} et il y a par conséquent {np.around(pvalue*100, 7)} % de chance que notre échantillon provienne d'une population à l'équilibre de Hardy Wienberg.
+            Le test du Chi2 produit une valeur de {np.around(chi2_value, 4)} et il y a, par conséquent, {np.around(pvalue*100, 7)} % de chance que notre échantillon provienne d'une population à l'équilibre de Hardy Weinberg.
             """
 
             if pvalue < 0.05:
                 """
-                **Comme cette valeur est inférieure à 5%, on en conclue, avec moins de 5% de chance de se tromper que la population ne suit pas l'équilibre de Hardy Wienberg.**
+                **Comme cette valeur est inférieure à 5%, on en conclut, avec moins de 5% de chance de se tromper que la population ne suit pas l'équilibre de Hardy Weinberg.**
                 """
             else:
                 """
-                **Comme cette valeur est supérieure à 5%, on en conclue qu'il a une forte chance que la population suive l'équilibre de Hardy Wienberg**
+                **Comme cette valeur est supérieure à 5%, on en conclut qu'il a une forte chance que la population suive l'équilibre de Hardy Weinberg**
                 """
 
     elif page == "Modélisation":
@@ -467,8 +467,8 @@ def main():
 
         f"""
         On compte parmis les {nb_runs} populations de la simulation:
-         - {nb_pop_HW} populations qui suivent l'équilibre de Hardy Wienberg\*
-         - {nb_pop_non_HW} populations qui ne suivent pas l'équilibre de Hardy Wienberg\*
+         - {nb_pop_HW} populations qui suivent l'équilibre de Hardy Weinberg\*
+         - {nb_pop_non_HW} populations qui ne suivent pas l'équilibre de Hardy Weinberg\*
 
         \*selon le critère du Chi2 avec moins de 5% de chance de se tromper
 
