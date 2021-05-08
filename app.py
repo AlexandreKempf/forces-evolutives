@@ -373,10 +373,10 @@ def main():
             Commencez par augmenter le `Nombre de générations` et diminuer la `Taille de la population` pour observer les effets de la dérive génétique.
             """
             pop_size = st.number_input(
-                "Taille de la population", 0, 1000000, 1000, 1
+                "Taille de la population", 0, 1000000000, 1000, 1
             )
         else:
-            pop_size = 1000000
+            pop_size = 1000000000
 
         if "Mutation" in columns:
             """
@@ -448,14 +448,15 @@ def main():
         fig = model.display_multiple_runs(multiple_runs, pop_size)
         st.pyplot(fig)
 
+        taille_echantillon = 100
         tests_chi2 = np.array(
             [
                 chisquare(
-                    ech,
+                    (ech / pop_size) * taille_echantillon,
                     f_exp=[
-                        (p_A ** 2) * pop_size,
-                        (2 * p_A * (1 - p_A)) * pop_size,
-                        ((1 - p_A) ** 2) * pop_size,
+                        (p_A ** 2) * taille_echantillon,
+                        (2 * p_A * (1 - p_A)) * taille_echantillon,
+                        ((1 - p_A) ** 2) * taille_echantillon,
                     ],
                 )[1]
                 for ech in multiple_runs[..., -1]
