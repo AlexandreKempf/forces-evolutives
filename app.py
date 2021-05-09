@@ -20,6 +20,7 @@ def run_model(
     fitness_AA,
     fitness_Aa,
     fitness_aa,
+    consanguinite,
 ):
     multiple_runs = np.zeros((nb_runs, 3, nb_generations))
     for i in range(nb_runs):
@@ -32,6 +33,7 @@ def run_model(
             fitness_AA,
             fitness_Aa,
             fitness_aa,
+            consanguinite,
         )
     return multiple_runs
 
@@ -158,7 +160,42 @@ def main():
         Du coup de manière logique, toutes les générations auront les mêmes proportions de génotypes
         puisque la valeur de $p$ et $q$ ne change pas.
 
+        ## Distribution des génotypes en fonction de la fréquence allélique
+
+        On peut représenter, en pourcentage d'individus, les fréquences de chaque génotype en fonction de la fréquence
+        de l'allèle A.
         """
+
+        fig, ax = plt.subplots(2, 1)
+        fig.set_size_inches(4, 5)
+        x = np.linspace(0, 1, 1000)
+        ax[0].plot(x, x ** 2, lw=2, label="(AA)", color=model.colors_map["AA"])
+        ax[0].plot(
+            x, 2 * x * (1 - x), lw=2, label="(Aa)", color=model.colors_map["Aa"]
+        )
+        ax[0].plot(
+            x, (1 - x) ** 2, lw=2, label="(aa)", color=model.colors_map["aa"]
+        )
+        ax[0].set_ylabel("fréquence\n génotypique")
+        ax[0].set_ylim(0, 1)
+        ax[0].set_xlim(0, 1)
+
+        ax[0].legend()
+
+        ax[1].fill_between(
+            x, 0, x ** 2, color=model.colors_map["AA"],
+        )
+        ax[1].fill_between(
+            x, x ** 2, x ** 2 + 2 * x * (1 - x), color=model.colors_map["Aa"],
+        )
+        ax[1].fill_between(
+            x, x ** 2 + 2 * x * (1 - x), 1, color=model.colors_map["aa"],
+        )
+        ax[1].set_ylabel("distribution\ngénotypique")
+        ax[1].set_xlabel("fréquence de l'allèle A")
+        ax[1].set_ylim(0, 1)
+        ax[1].set_xlim(0, 1)
+        st.pyplot(fig)
 
     elif page == "Test Statistique":
 
@@ -273,7 +310,7 @@ def main():
         ax.vlines(32.977, 0, 0.5, linestyle="--")
         ax.set_xlabel("Valeur du Chi2")
         ax.set_ylabel("Probabilité")
-        st.pyplot(fig,)
+        st.pyplot(fig)
 
         """
         On peut voir que l'échantillon a une probabilité très faible de venir de la population de notre hypothèse.
@@ -350,7 +387,12 @@ def main():
 
         columns = st.multiselect(
             label="Quelles forces evolutives ?",
-            options=["Dérive génétique", "Mutation", "Sélection Naturelle"],
+            options=[
+                "Dérive génétique",
+                "Mutation",
+                "Sélection Naturelle",
+                "Consanguinité",
+            ],
         )
 
         nb_runs = st.sidebar.number_input(
@@ -417,8 +459,24 @@ def main():
             fitness_Aa = 1.0
             fitness_aa = 1.0
 
+        if "Consanguinité" in columns:
+            """
+            ## Consanguinité
+
+            On modélise la consanguinité en modifiant les probabilités de rencontre entre individus avant la reproduction.
+            Une valeur de consanguinité, nommée F, définie la similarité des génotypes de deux individus.
+            Une valuer F de 1 signifie qu'ils ont tous les gènes en commun, comme les vrais jumeaux,
+            alors qu'un F de 0.5 indique qu'il partage que la moitié des gènes, comme un parent avec son enfant.
+
+            On peut voir que la consanguinité ne modifie pas la fréquence allèlique, mais qu'un fort
+            taux de consanguinité favorise les homozygotes.
+            """
+            consanguinite = st.slider("F de consanguinité: ", 0.0, 1.0, 0.0)
+        else:
+            consanguinite = 0.0
+
         f"""
-        ## Resultats
+        ## Résultats
 
         Évolution des fréquences allèliques et des génotypes sur {nb_runs} populations.
         On observe les populations individuelles avec les lignes noires ainsi que les tendances moyennes
@@ -444,6 +502,7 @@ def main():
             fitness_AA,
             fitness_Aa,
             fitness_aa,
+            consanguinite,
         )
         fig = model.display_multiple_runs(multiple_runs, pop_size)
         st.pyplot(fig)
