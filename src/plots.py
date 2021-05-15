@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
 
-
 colors_map = {
     "aa": "#ffce00",
     "other2": "#ff3803",
@@ -10,72 +9,6 @@ colors_map = {
     "other1": "#9e003e",
     "AA": "#630049",
 }
-
-
-def run_simultation(
-    nb_gen,
-    N,
-    p_A,
-    mutation_rate_A_to_a,
-    mutation_rate_a_to_A,
-    fitness_AA,
-    fitness_Aa,
-    fitness_aa,
-    consanguinite,
-):
-    max_fitness = np.max([fitness_AA, fitness_Aa, fitness_aa])
-    fitness_AA /= max_fitness
-    fitness_Aa /= max_fitness
-    fitness_aa /= max_fitness
-    p_a = 1 - p_A
-    genotypes = np.zeros((3, nb_gen))  # AA, Aa, aa
-    N_AA = int(N * p_A ** 2)
-    N_aa = int(N * p_a ** 2)
-    N_Aa = N - (N_AA + N_aa)
-    F = consanguinite
-
-    for t in range(nb_gen):
-        p_AA = N_AA / N
-        p_Aa = N_Aa / N
-        p_aa = N_aa / N
-
-        # new generation
-        p_AA = (
-            (p_AA * (p_AA * (1 - F) + F))
-            + (0.25 * p_Aa * (p_Aa * (1 - F) + F))
-            + (p_AA * p_Aa * (1 - F))
-        )
-
-        p_aa = (
-            (p_aa * (p_aa * (1 - F) + F))
-            + (0.25 * p_Aa * (p_Aa * (1 - F) + F))
-            + (p_aa * p_Aa * (1 - F))
-        )
-
-        N_AA = np.random.binomial(N, p_AA)
-        N_aa = np.random.binomial(N, p_aa)
-        N_Aa = N - N_AA - N_aa
-
-        # selection
-        if not fitness_AA == fitness_Aa == fitness_aa:
-            N_AA = np.random.binomial(N_AA, fitness_AA)
-            N_Aa = np.random.binomial(N_Aa, fitness_Aa)
-            N_aa = np.random.binomial(N_aa, fitness_aa)
-
-        # mutation
-        if mutation_rate_A_to_a != 0 or mutation_rate_a_to_A != 0:
-            mut_AA_to_Aa = np.random.binomial(N_AA, mutation_rate_A_to_a)
-            mut_Aa_to_aa = np.random.binomial(N_Aa, mutation_rate_A_to_a / 2)
-            mut_Aa_to_AA = np.random.binomial(N_Aa, mutation_rate_a_to_A / 2)
-            mut_aa_to_Aa = np.random.binomial(N_aa, mutation_rate_a_to_A)
-            N_AA += mut_Aa_to_AA - mut_AA_to_Aa
-            N_Aa += mut_AA_to_Aa - mut_Aa_to_AA - mut_Aa_to_aa + mut_aa_to_Aa
-            N_aa += mut_Aa_to_aa - mut_aa_to_Aa
-
-        genotypes[0, t] = N_AA
-        genotypes[1, t] = N_Aa
-        genotypes[2, t] = N_aa
-    return genotypes
 
 
 def display_multiple_runs(multiple_runs, N):
@@ -93,7 +26,6 @@ def display_multiple_runs(multiple_runs, N):
             color=colors_map["aa"],
         )
         ax.plot(data.T, lw=1, color="black", alpha=0.3)
-        # ax.plot(np.mean(data, 0), lw=3, color=colors_map["line"])
         return ax
 
     def draw_proba_genotypes(data, ax, N):
@@ -120,10 +52,6 @@ def display_multiple_runs(multiple_runs, N):
         ax.plot(
             data[:, 0, :].T + data[:, 1, :].T, lw=1, color="black", alpha=0.3
         )
-        # ax.plot(mean_AA, lw=3, color=colors_map["line"])
-        # ax.plot(mean_AA + mean_Aa, lw=3, color=colors_map["line"])
-        # ax.plot(np.mean(data, 0), lw=3, color="#2f528e")
-        # ax.plot(mean_AA, lw=3, color=colors_map["line"])
         return ax
 
     fig, axes = plt.subplots(2, 1)
@@ -156,10 +84,7 @@ def display_echantillons(echantillons, truth):
     ax.set_xlabel("Nombre d'individus de chaque génotype")
     ax.set_xlim(0, np.sum(echantillons, axis=1).max())
     ax.tick_params(
-        axis="y",  # changes apply to the x-axis
-        which="both",  # both major and minor ticks are affected
-        left=False,  # ticks along the bottom edge are off
-        right=False,
+        axis="y", which="both", left=False, right=False,
     )
     genotypes = ["AA", "Aa", "aa"]
     labels = ["Population totale", "", " ", "Échantillons"]
@@ -177,4 +102,44 @@ def display_echantillons(echantillons, truth):
             color=color,
         )
     ax.legend(ncol=3, bbox_to_anchor=(0, 1), loc="lower left", fontsize="small")
+    return fig
+
+
+def plot_genotype_vs_frequence_allelique():
+    fig, ax = plt.subplots(2, 1)
+    fig.set_size_inches(4, 5)
+    x = np.linspace(0, 1, 1000)
+    ax[0].plot(x, x ** 2, lw=2, label="(AA)", color=colors_map["AA"])
+    ax[0].plot(x, 2 * x * (1 - x), lw=2, label="(Aa)", color=colors_map["Aa"])
+    ax[0].plot(x, (1 - x) ** 2, lw=2, label="(aa)", color=colors_map["aa"])
+    ax[0].set_ylabel("fréquence\n génotypique")
+    ax[0].set_ylim(0, 1)
+    ax[0].set_xlim(0, 1)
+
+    ax[0].legend()
+
+    ax[1].fill_between(
+        x, 0, x ** 2, color=colors_map["AA"],
+    )
+    ax[1].fill_between(
+        x, x ** 2, x ** 2 + 2 * x * (1 - x), color=colors_map["Aa"],
+    )
+    ax[1].fill_between(
+        x, x ** 2 + 2 * x * (1 - x), 1, color=colors_map["aa"],
+    )
+    ax[1].set_ylabel("distribution\ngénotypique")
+    ax[1].set_xlabel("fréquence de l'allèle A")
+    ax[1].set_ylim(0, 1)
+    ax[1].set_xlim(0, 1)
+    return fig
+
+
+def chi2_curve():
+    fig, ax = plt.subplots(1, 1)
+    fig.set_size_inches(4, 2)
+    x = np.linspace(0, 40, 1000)
+    ax.plot(x, chi2.pdf(x, 2), "r-", lw=2, alpha=0.6, label="chi2")
+    ax.vlines(32.977, 0, 0.5, linestyle="--")
+    ax.set_xlabel("Valeur du Chi2")
+    ax.set_ylabel("Probabilité")
     return fig
