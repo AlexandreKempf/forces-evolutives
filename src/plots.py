@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn
+from scipy.stats import chi2
 
 colors_map = {
     "aa": "#ffce00",
