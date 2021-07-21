@@ -14,7 +14,7 @@ def run_simulation(
     fitness_aa,
     consanguinite,
 ):
-    max_fitness = fitness_AA + fitness_Aa + fitness_aa
+    max_fitness = np.max([fitness_AA, fitness_Aa, fitness_aa])
     fitness_AA /= max_fitness
     fitness_Aa /= max_fitness
     fitness_aa /= max_fitness
@@ -45,13 +45,17 @@ def run_simulation(
 
         N_AA = np.random.binomial(N, p_AA)
         N_aa = np.random.binomial(N, p_aa)
-        N_Aa = np.maximum(N - (N_AA + N_aa), 0)
+        N_Aa = N - N_AA - N_aa
 
         # selection
         if not fitness_AA == fitness_Aa == fitness_aa:
             N_AA = np.random.binomial(N_AA, fitness_AA)
             N_Aa = np.random.binomial(N_Aa, fitness_Aa)
             N_aa = np.random.binomial(N_aa, fitness_aa)
+            total = N_AA + N_Aa + N_aa
+            N_AA = N * N_AA / total
+            N_Aa = N * N_Aa / total
+            N_aa = N * N_aa / total
 
         # mutation
         if mutation_rate_A_to_a != 0 or mutation_rate_a_to_A != 0:
@@ -62,6 +66,10 @@ def run_simulation(
             N_AA += mut_Aa_to_AA - mut_AA_to_Aa
             N_Aa += mut_AA_to_Aa - mut_Aa_to_AA - mut_Aa_to_aa + mut_aa_to_Aa
             N_aa += mut_Aa_to_aa - mut_aa_to_Aa
+            total = N_AA + N_Aa + N_aa
+            N_AA = N * N_AA / total
+            N_Aa = N * N_Aa / total
+            N_aa = N * N_aa / total
 
         genotypes[0, t] = N_AA
         genotypes[1, t] = N_Aa
