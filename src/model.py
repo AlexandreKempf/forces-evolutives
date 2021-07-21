@@ -14,7 +14,7 @@ def run_simulation(
     fitness_aa,
     consanguinite,
 ):
-    max_fitness = np.max([fitness_AA, fitness_Aa, fitness_aa])
+    max_fitness = fitness_AA + fitness_Aa + fitness_aa
     fitness_AA /= max_fitness
     fitness_Aa /= max_fitness
     fitness_aa /= max_fitness
