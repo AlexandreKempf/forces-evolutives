@@ -1,15 +1,12 @@
 import streamlit as st
 import numpy as np
-import pandas as pd
-import matplotlib.pyplot as plt
-from scipy.stats import chi2
 from scipy.stats import chisquare
 
 import src.model
 import src.plots
 
 
-@st.cache
+@st.cache_data
 def run_model(
     nb_runs,
     nb_generations,
@@ -52,9 +49,7 @@ def generate_page():
     )
 
     nb_runs = st.sidebar.number_input("Nombre de simulations", 1, 200, 10, 1)
-    nb_generations = st.sidebar.number_input(
-        "Nombre de générations", 1, 3000, 200, 10
-    )
+    nb_generations = st.sidebar.number_input("Nombre de générations", 1, 3000, 200, 10)
     p_A = st.sidebar.slider("Probabilité de l'allèle A", 0.0, 1.0, 0.5)
     st.sidebar.write(f"Probabilité de l'allèle A: {p_A:.2f}")
     st.sidebar.write(f"Probabilité de l'allèle a: {1-p_A:.2f}")
@@ -70,9 +65,7 @@ def generate_page():
         Commencez par augmenter le `Nombre de générations` et diminuer la `Taille de la population` pour observer les effets de la dérive génétique.
         """
         )
-        pop_size = st.number_input(
-            "Taille de la population", 0, int(1e9), 1000, 1
-        )
+        pop_size = st.number_input("Taille de la population", 0, int(1e9), 1000, 1)
     else:
         pop_size = int(1e9)
 
@@ -89,12 +82,8 @@ def generate_page():
         """
         )
 
-        mutation_rate_a_to_A = st.number_input(
-            "Taux de mutation a -> A", 0.0, 1.0, 0.0, 0.001, format="%.4f"
-        )
-        mutation_rate_A_to_a = st.number_input(
-            "Taux de mutation A -> a", 0.0, 1.0, 0.0, 0.001, format="%.4f"
-        )
+        mutation_rate_a_to_A = st.number_input("Taux de mutation a -> A", 0.0, 1.0, 0.0, 0.001, format="%.4f")
+        mutation_rate_A_to_a = st.number_input("Taux de mutation A -> a", 0.0, 1.0, 0.0, 0.001, format="%.4f")
     else:
         mutation_rate_a_to_A = 0.0
         mutation_rate_A_to_a = 0.0
@@ -176,7 +165,7 @@ def generate_page():
             chisquare(
                 (ech / pop_size) * taille_echantillon,
                 f_exp=[
-                    (p_A ** 2) * taille_echantillon,
+                    (p_A**2) * taille_echantillon,
                     (2 * p_A * (1 - p_A)) * taille_echantillon,
                     ((1 - p_A) ** 2) * taille_echantillon,
                 ],
@@ -191,10 +180,10 @@ def generate_page():
     st.markdown(
         f"""
     On compte parmis les {nb_runs} populations de la simulation:
-     - {nb_pop_HW} populations qui suivent l'équilibre de Hardy Weinberg\*
-     - {nb_pop_non_HW} populations qui ne suivent pas l'équilibre de Hardy Weinberg\*
+     - {nb_pop_HW} populations qui suivent l'équilibre de Hardy Weinberg\\*
+     - {nb_pop_non_HW} populations qui ne suivent pas l'équilibre de Hardy Weinberg\\*
 
-    \*selon le critère du Chi2 avec moins de 5% de chance de se tromper
+    \\*selon le critère du Chi2 avec moins de 5% de chance de se tromper
 
     """
     )

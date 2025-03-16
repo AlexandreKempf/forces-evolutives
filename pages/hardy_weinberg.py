@@ -1,14 +1,11 @@
 import streamlit as st
-import numpy as np
-import matplotlib.pyplot as plt
 import src.plots
 
 
 def generate_page():
-    st.markdown(
-        """
+    st.markdown("""
     # L'équilibre d'Hardy-Weinberg
-
+    
     Hardy Weinberg s'interessent à l'évolution de la fréquence des allèles
     et aux génotypes d'une population au cours du temps.
     Ils nous disent dans une population d'effectif infini, sans forces évolutives
@@ -19,8 +16,8 @@ def generate_page():
     ## Démonstration
 
     On cherche à démontrer que :
-     - la proportion de chaque allèle reste constante au cours des générations.
-     - la proportion de chaque génotype reste constante au cours des générations.
+        - la proportion de chaque allèle reste constante au cours des générations.
+        - la proportion de chaque génotype reste constante au cours des générations.
 
     Pour cela on considère deux allèles `A` et `a` ce qui nous donne 3 génotypes (`AA`), (`Aa`), (`aa`).
 
@@ -32,7 +29,7 @@ def generate_page():
     Pour calculer la proportion d'un génotype, il faut comparer le nombre d'individus de ce génotype ($N_{AA}$
     par exemple pour le génotype (`AA`)) par rapport au nombre total d'individus dans la population ($N_{total}$).
     $$
-    proportion\_AA = \\frac{N_{AA}}{N_{total}}
+    proportion\\_AA = \\frac{N_{AA}}{N_{total}}
     $$
     Par exemple, si une population a 30 (`AA`), 40 (`Aa`), et 70 (`aa`), la proportion de génotype (`AA`) est de $\\frac{30}{140} = 0.214$
 
@@ -43,7 +40,7 @@ def generate_page():
     il suffit de compter le nombre d'allèle A par rapport à la quantité totale d'allèles.
 
     $$
-    p = \\frac{nb\_allele\_A}{nb\_allele\_total}
+    p = \\frac{nb\\_allele\\_A}{nb\\_allele\\_total}
     $$
 
     Les individus homozygotes (`AA`) possèdent deux fois l'allèle `A` et les individus hétérozygotes (`Aa`) ne possèdent qu'un allèle A.
@@ -60,7 +57,7 @@ def generate_page():
     est de $\\frac{2 . 30 + 1 . 40}{2 . 140} = 0.357
     $
 
-    Et ca veut dire qu'un individu de cette population à $35.7\%$ chance d'avoir l'allèle A.
+    Et ca veut dire qu'un individu de cette population à $35.7\\%$ chance d'avoir l'allèle A.
 
     On peut procéder de la même manière pour calculer la proportion de l'allèle `a`,
     que l'on appelle `q` ou simplement faire $q = (1-p)$.
@@ -70,12 +67,10 @@ def generate_page():
     Dans une population panmictique, chaque nouvel individu est formé par la rencontre alêatoire de deux gamètes.
     Chaque gamète possède un seul allèle avec la probabilité $pA$ que cet allèle soit un `A`.
     Comme deux gamètes se rencontrent au hasard, on peut faire l'arbre de probabilité suivant:
-    """
-    )
+    """)
     st.image("images/proba_tree.png", width=800)
 
-    st.markdown(
-        """
+    st.markdown("""
     On a donc $p^2$ chance d'obtenir un individu (`AA`), $2pq$ chance d'avoir un individu (`Aa`),
     et $q^2$ chance d'avoir un individu (`aa`).
     Si on appelle $M$ le nombre d'individus de cette nouvelle génération,
@@ -115,8 +110,7 @@ def generate_page():
 
     On peut représenter, en pourcentage d'individus, les fréquences de chaque génotype en fonction de la fréquence
     de l'allèle A.
-    """
-    )
+    """)
 
     fig = src.plots.plot_genotype_vs_frequence_allelique()
     st.pyplot(fig)

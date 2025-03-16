@@ -45,24 +45,14 @@ def generate_page():
         0.01,
     )
     population_ratio = np.array([x[0], x[1] - x[0], 1 - x[1]])
-    sample_size = st.number_input(
-        "Nombre d'individus dans l'échantillon", 0, 1000000, 100, 10
-    )
+    sample_size = st.number_input("Nombre d'individus dans l'échantillon", 0, 1000000, 100, 10)
     nb_echantillons = st.number_input("Nombre d'échantillons", 0, 30, 10, 1)
 
     multiple_echantillon = np.zeros((nb_echantillons, 3))
-    multiple_echantillon[:, 0] = np.random.binomial(
-        sample_size, population_ratio[0], nb_echantillons
-    )
-    multiple_echantillon[:, 1] = np.random.binomial(
-        sample_size, population_ratio[1], nb_echantillons
-    )
-    multiple_echantillon[:, 2] = sample_size - (
-        multiple_echantillon[:, 0] + multiple_echantillon[:, 1]
-    )
-    fig = src.plots.display_echantillons(
-        multiple_echantillon, truth=population_ratio * sample_size
-    )
+    multiple_echantillon[:, 0] = np.random.binomial(sample_size, population_ratio[0], nb_echantillons)
+    multiple_echantillon[:, 1] = np.random.binomial(sample_size, population_ratio[1], nb_echantillons)
+    multiple_echantillon[:, 2] = sample_size - (multiple_echantillon[:, 0] + multiple_echantillon[:, 1])
+    fig = src.plots.display_echantillons(multiple_echantillon, truth=population_ratio * sample_size)
     st.pyplot(fig)
 
     st.markdown(
@@ -134,19 +124,13 @@ def generate_page():
     """
     )
 
-    col1, col2, col3 = st.beta_columns(3)
+    col1, col2, col3 = st.columns(3)
     with col1:
-        AA = st.number_input(
-            "nombre de (AA) dans l'échantillon", 0, 1000000, 0, 1
-        )
+        AA = st.number_input("nombre de (AA) dans l'échantillon", 0, 1000000, 0, 1)
     with col2:
-        Aa = st.number_input(
-            "nombre de (Aa) dans l'échantillon", 0, 1000000, 0, 1
-        )
+        Aa = st.number_input("nombre de (Aa) dans l'échantillon", 0, 1000000, 0, 1)
     with col3:
-        aa = st.number_input(
-            "nombre de (aa) dans l'échantillon", 0, 1000000, 0, 1
-        )
+        aa = st.number_input("nombre de (aa) dans l'échantillon", 0, 1000000, 0, 1)
 
     if AA == Aa == aa == 0:
         # nothing is inputted
@@ -156,13 +140,11 @@ def generate_page():
         fA = (AA + 0.5 * Aa) / N
         fa = 1 - fA
 
-        fAA = fA ** 2
+        fAA = fA**2
         fAa = 2 * fA * fa
-        faa = fa ** 2
+        faa = fa**2
 
-        chi2_value, pvalue = chisquare(
-            [AA, Aa, aa], f_exp=[fAA * N, fAa * N, faa * N]
-        )
+        chi2_value, pvalue = chisquare([AA, Aa, aa], f_exp=[fAA * N, fAa * N, faa * N])
 
         st.markdown(
             f"""
